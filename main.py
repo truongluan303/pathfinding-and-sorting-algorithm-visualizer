@@ -4,25 +4,27 @@ from pathfinding_visualizer import PathfindingVisualizer
 from tkinter import Tk, Label, Button, messagebox
 
 
+# ask if user wants to quit
 def _on_closing():
     if messagebox.askokcancel('Quit', 'Do you want to quit?'):
         sys.exit(0)
 
-def _choose_pathfinding(root):
-    root.wm_withdraw()          # hide menu
-    PathfindingVisualizer()     # run visualizer
-    root.deiconify()            # show menu again when visualizer is closed
+# run the chosen visualizer
+def _visualize(root, option):
+    root.wm_withdraw()  # hide menu
+    # run visualizer
+    if option == 1:
+        PathfindingVisualizer()     
+    else:
+        SortingVisualizer()
+    root.deiconify()    # show menu again when visualizer is closed
 
-def _choose_sorting(root):
-    root.wm_withdraw()          # hide menu
-    SortingVisualizer()         # run visualizer
-    root.deiconify()            # show menu again when visualizer is closed
 
 
-###########################
-########### MAIN ##########
-#-------------------------#
-if __name__ == "__main__":
+##############################
+########### M A I N ##########
+#----------------------------#
+def main():
     # create the menu GUI
     root = Tk()
     root.geometry('600x370')
@@ -34,14 +36,14 @@ if __name__ == "__main__":
     text.pack()
 
     pathfinding = Button(root, text='Path Finding Algorithms',
-                         command=lambda:_choose_pathfinding(root))
+                         command=lambda:_visualize(root, 1))
     pathfinding.config(height=3, width=30, font='Courier 13 bold', fg='white', bg='brown')
     pathfinding.pack()
 
     Label(root, height=1).pack()
 
     sorting = Button(root, text='Sorting Algorithms',
-                         command=lambda:_choose_sorting(root))
+                         command=lambda:_visualize(root, 2))
     sorting.config(height=3, width=30, font='Courier 13 bold', fg='white', bg='brown')
     sorting.pack()
 
@@ -52,3 +54,7 @@ if __name__ == "__main__":
     exit_button.pack()
 
     root.mainloop()
+
+
+if __name__ == "__main__":
+    main()

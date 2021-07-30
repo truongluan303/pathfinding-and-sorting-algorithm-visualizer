@@ -2,11 +2,11 @@ import pygame
 from random import randint
 from pygame.constants import K_1, K_2, K_3, K_4, K_5
 
-BAR_WIDTH = 3
-NUM_OF_BARS = 320
+BAR_WIDTH = 2
+NUM_OF_BARS = 500
 SCREEN_W = BAR_WIDTH * NUM_OF_BARS
-SCREEN_H = int(NUM_OF_BARS * 1.5)
-SHIFT_DOWN = 200
+SCREEN_H = NUM_OF_BARS
+SHIFT_DOWN = 150
 NUM_OG_ALGOS = 5
 
 WHITE = (200, 200, 200)
@@ -141,7 +141,7 @@ class SortingVisualizer:
         if looping and not stop_sorting:
             for i in range(NUM_OF_BARS):
                 bar_color[i] = YELLOW
-                pygame.time.delay(4)
+                pygame.time.delay(1)
                 show_bars(self.screen)
                 pygame.display.update()
 
@@ -190,7 +190,7 @@ def __show_running_instruction(screen):
 def __create_bar(screen, value, index, color):
     pos_x = index * BAR_WIDTH
     pos_y = SCREEN_H + SHIFT_DOWN
-    height = value * 1.5
+    height = value
     # generate the bar with the desired characteristics
     image = pygame.Surface([BAR_WIDTH, height])
     rect = image.get_rect()                             

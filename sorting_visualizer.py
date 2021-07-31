@@ -86,14 +86,14 @@ class SortingVisualizer:
 
     # create the text instruction on top of the screen
     def __create_instruction(self):
-        y = 10
-        pos_x1 = 400
+        y = 30
+        pos_x1 = 700
         self.pos_x2 = 30
         self.pos_y = []
         display_text(self.screen, "C: Shuffle", pos_x1, 10)
         display_text(self.screen, "<Enter>: Start", pos_x1, 30)
         display_text(self.screen, "ESC: Exit visualizer", pos_x1, 50)
-
+        display_text(self.screen, "Press the corresponding number to choose algorithm", self.pos_x2, 10)
         # create the algorithm names for the user to choose
         self.algo_names = ["1. Merge Sort", "2. Quick Sort", "3. Insertion Sort",
                            "4. Selection Sort", "5. Bubble Sort"]
@@ -129,14 +129,14 @@ class SortingVisualizer:
         sorted = True
         stop_sorting = False
         switcher = {
-            1: lambda screen, bar_list: merge_sort(screen, bar_list),
-            2: lambda screen, bar_list: quick_sort(screen, bar_list),
-            3: lambda screen, bar_list: insertion_sort(screen, bar_list),
-            4: lambda screen, bar_list: selection_sort(screen, bar_list),
-            5: lambda screen, bar_list: bubble_sort(screen, bar_list)
+            1: lambda screen, bar_list, bar_color: merge_sort(screen, bar_list, bar_color),
+            2: lambda screen, bar_list, bar_color: quick_sort(screen, bar_list, bar_color),
+            3: lambda screen, bar_list, bar_color: insertion_sort(screen, bar_list, bar_color),
+            4: lambda screen, bar_list, bar_color: selection_sort(screen, bar_list, bar_color),
+            5: lambda screen, bar_list, bar_color: bubble_sort(screen, bar_list, bar_color)
         }
         # use the algorithm corresponding to the number chosen
-        switcher.get(self.algo_chosen)(self.screen, bar_list)
+        switcher.get(self.algo_chosen)(self.screen, bar_list, bar_color)
         # add the running effect after the bars are sorted
         if looping and not stop_sorting:
             for i in range(NUM_OF_BARS):
@@ -227,8 +227,7 @@ def __update_display(screen):
 
 ######################### SELECTION SORT #########################
 
-def selection_sort(screen, array):
-    global bar_color
+def selection_sort(screen, array, bar_color):
     for i in range (0, len(array)):
         min = array[i]
         for j in range (i, len(array)):
@@ -246,11 +245,9 @@ def selection_sort(screen, array):
             bar_color[i] = WHITE
             
 
-
 ######################### BUBBLE SORT #############################
 
-def bubble_sort(screen, array):
-    global bar_color
+def bubble_sort(screen, array, bar_color):
     for i in range (0, len(array)):
         if not stop_sorting:
             __input_handling()
@@ -268,11 +265,9 @@ def bubble_sort(screen, array):
                     bar_color[j] = WHITE
 
 
-
 ########################## INSERTION SORT ############################
 
-def insertion_sort(screen, arr):
-    global bar_color
+def insertion_sort(screen, arr, bar_color):
     # Traverse through 1 to len(arr)
     for i in range(1, len(arr)):
         key = arr[i]
@@ -290,23 +285,21 @@ def insertion_sort(screen, arr):
             bar_color[j + 1] = WHITE
             bar_color[NUM_OF_BARS - 1] = WHITE
         arr[j + 1] = key
-
+        bar_color[i] = WHITE
 
 
 ############################# MERGE SORT ##########################
 
-# helper function
-def merge_sort(screen, arr):
-    __merge_sort(screen, arr, 0, len(arr) - 1)
+def merge_sort(screen, arr, bar_color):
+    __merge_sort(screen, arr, bar_color, 0, len(arr) - 1)
 
-def __merge_sort(screen, arr, begin, end):
-    global bar_color
+def __merge_sort(screen, arr, bar_color, begin, end):
     if begin < end and not stop_sorting:
         # find the mid point
         mid = (begin + end) // 2
         # keeps dividing the chunks in halves
-        __merge_sort(screen, arr, begin, mid)
-        __merge_sort(screen, arr, mid + 1, end)
+        __merge_sort(screen, arr, bar_color, begin, mid)
+        __merge_sort(screen, arr, bar_color, mid + 1, end)
         # merge the halves together
         l = begin
         r = mid + 1
@@ -342,10 +335,10 @@ def __merge_sort(screen, arr, begin, end):
                 break
             bar_color[l] = GREEN
             pygame.time.delay(3)
-            __update_display(screen)
             bar_color[l] = WHITE
             # add to the array
             temp.append(arr[l])
+            __update_display(screen)
             l += 1
 
         # adding the leftover from the right subarray
@@ -355,10 +348,10 @@ def __merge_sort(screen, arr, begin, end):
             # update the display
             bar_color[r] = GREEN
             pygame.time.delay(3)
-            __update_display(screen)
             bar_color[r] = WHITE
             # add to the array
             temp.append(arr[r])
+            __update_display(screen)
             r += 1
 
         i, j = begin, 0
@@ -368,24 +361,23 @@ def __merge_sort(screen, arr, begin, end):
                 break
             # update the display
             bar_color[i] = RED
+            arr[i] = temp[j]
             pygame.time.delay(3)
             __update_display(screen)
             bar_color[i] = WHITE
-            arr[i] = temp[j]
             i += 1
             j += 1
-
 
 
 
 ############################# QUICK SORT ############################
 
 # helper function
-def quick_sort(screen, arr):
-    __quick_sort(screen, arr, 0, len(arr)-1)
+def quick_sort(screen, arr, bar_color):
+    __quick_sort(screen, arr, bar_color, 0, len(arr)-1)
 
 
-def __quick_sort(screen, arr, begin, end):
+def __quick_sort(screen, arr, bar_color, begin, end):
     if (begin < end):
         pivot = arr[end]
         j = begin - 1
@@ -400,9 +392,7 @@ def __quick_sort(screen, arr, begin, end):
                     j += 1
                     bar_color[j] = GREEN
                     # then swap arr[j] with arr[i]
-                    temp = arr[i]
-                    arr[i] = arr[j]
-                    arr[j] = temp
+                    swap_bars(arr, i, j)
 
                 # display the bars
                 pygame.time.delay(3)
@@ -417,12 +407,7 @@ def __quick_sort(screen, arr, begin, end):
         pivot_index = j + 1
 
         # do the same process to the left partition and right partition
-        __quick_sort(screen, arr, pivot_index + 1, end)
-        __quick_sort(screen, arr, begin, pivot_index - 1)
+        __quick_sort(screen, arr, bar_color, pivot_index + 1, end)
+        __quick_sort(screen, arr, bar_color, begin, pivot_index - 1)
 
-    
-    
-
-
-if __name__ == "__main__":
-    SortingVisualizer()
+# end of sorting_visualiuzer.py 

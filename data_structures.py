@@ -1,8 +1,3 @@
-from typing import Generic, TypeVar
-
-T = TypeVar('T')
-
-
 ##############################
 ######### LINKED QUEUE #######
 class Queue:
@@ -78,7 +73,7 @@ class Stack:
         return self.size == 0
 
     # add new node
-    def push(self, item: T):
+    def push(self, item):
         self.size += 1
         self.initialized = True
         new = Node(item)

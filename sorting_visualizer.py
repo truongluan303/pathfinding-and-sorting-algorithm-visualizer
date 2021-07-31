@@ -1,5 +1,6 @@
 import pygame
 from random import randint
+from visualizer import Visualizer
 from pygame.constants import K_1, K_2, K_3, K_4, K_5
 
 BAR_WIDTH = 2
@@ -16,10 +17,7 @@ GREEN = (10, 225, 20)
 RED = (255, 0 , 0)
 
 font = None
-
 looping = True          # keep the mainloop run
-bar_list = None         # list of bars to display
-bar_color = None        # the color for each bar
 sorted = False          # check if the bar list is already sorted
 stop_sorting = False    # check whether to stop the sorting process without quitting
 
@@ -28,21 +26,22 @@ stop_sorting = False    # check whether to stop the sorting process without quit
 ######################### SORTING VISUALIZER CLASS ##########################
 # create the GUI and visualize the sorting process for different algorithms #
 #---------------------------------------------------------------------------#
-class SortingVisualizer:
+class SortingVisualizer(Visualizer):
+
     def __init__(self) -> None:
-        global looping, bar_list, font, bar_color, sorted, stop_sorting
-        pygame.init()
+        super().__init__(SCREEN_W, SCREEN_H + SHIFT_DOWN, 'Sorting Algorithms Visualizer')
+
         #######  initialize variables  #######
+        global looping, bar_list, font, bar_color, sorted, stop_sorting
         font = pygame.font.SysFont('consolas', 16, bold=True)   # the text font
-        bar_list = list(range(1, NUM_OF_BARS + 1))              # generate the bars
         self.algo_text_colors = [GREEN] * NUM_OG_ALGOS          # generate the bars' colors
+        self.bar_list = None                                    # list of bars to display
+        self.bar_color = None                                   # the color for each bar
         self.algo_chosen = 1    
         looping = True         
-        sorted = False          
-        #######  initalize the display and run the visualizer  #######
-        pygame.display.set_caption('Sorting Algorithms Visualizer')
-        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H + SHIFT_DOWN))
-        self.clock = pygame.time.Clock()
+        sorted = False         
+
+        #######  get the visualizer run  #######
         self.__create_instruction()
         self.__choose_algo(1)
         self.__shuffle()
@@ -52,7 +51,7 @@ class SortingVisualizer:
     # keep the mainloop running
     def __mainloop(self):
         while looping:
-            show_bars(self.screen)
+            show_bars(self.screen, self.bar_list, self.bar_color)
             self.__draw()
             self.__input_handling()
 
@@ -79,9 +78,7 @@ class SortingVisualizer:
 
     def __draw(self):
         self.__create_instruction()
-        pygame.display.update()
-        pygame.display.flip()
-        self.clock.tick(60)
+        super().draw()
 
 
     # create the text instruction on top of the screen
@@ -115,17 +112,18 @@ class SortingVisualizer:
 
     # shuffle the bars
     def __shuffle(self):
-        global sorted, bar_color
-        sorted = False                          # set unsorted
-        bar_color = [WHITE] * NUM_OF_BARS       # reset bar colors
+        global sorted
+        self.bar_list = list(range(1, NUM_OF_BARS + 1)) # generate the bars
+        sorted = False                                  # set unsorted
+        self.bar_color = [WHITE] * NUM_OF_BARS          # reset bar colors
         for i in range(NUM_OF_BARS):
-            rand = randint(0, NUM_OF_BARS - 1)  # generate a random index
-            swap_bars(bar_list, i, rand)        # swap to shuffle
+            rand = randint(0, NUM_OF_BARS - 1)      # generate a random index
+            swap_bars(self.bar_list, i, rand)            # swap to shuffle
 
 
     # start sorting
     def __start(self):
-        global sorted, stop_sorting, bar_color
+        global sorted, stop_sorting
         sorted = True
         stop_sorting = False
         switcher = {
@@ -136,13 +134,13 @@ class SortingVisualizer:
             5: lambda screen, bar_list, bar_color: bubble_sort(screen, bar_list, bar_color)
         }
         # use the algorithm corresponding to the number chosen
-        switcher.get(self.algo_chosen)(self.screen, bar_list, bar_color)
+        switcher.get(self.algo_chosen)(self.screen, self.bar_list, self.bar_color)
         # add the running effect after the bars are sorted
         if looping and not stop_sorting:
             for i in range(NUM_OF_BARS):
-                bar_color[i] = YELLOW
+                self.bar_color[i] = YELLOW
                 pygame.time.delay(1)
-                show_bars(self.screen)
+                show_bars(self.screen, self.bar_list, self.bar_color)
                 pygame.display.update()
 
 ####################  end of Sorting Visualizer Class  ####################
@@ -164,8 +162,7 @@ def swap_bars(arr, idx1, idx2):
 
 
 # display the bar list on
-def show_bars(screen):
-    global bar_color
+def show_bars(screen, bar_list, bar_color):
     screen.fill(BLACK)
     for i in range(len(bar_list)):
         __create_bar(screen, bar_list[i], i, bar_color[i])
@@ -213,8 +210,8 @@ def __input_handling():
                 sorted = False
 
 
-def __update_display(screen):
-    show_bars(screen)
+def __update_display(screen, bar_list, bar_color):
+    show_bars(screen, bar_list, bar_color)
     __show_running_instruction(screen)
     pygame.display.update()
     __input_handling()
@@ -240,7 +237,7 @@ def selection_sort(screen, array, bar_color):
                     min = array[j]
                     array[j] = temp
                     array[i] = min
-                __update_display(screen)           
+                __update_display(screen, array, bar_color)           
             bar_color[j] = WHITE
             bar_color[i] = WHITE
             
@@ -249,20 +246,18 @@ def selection_sort(screen, array, bar_color):
 
 def bubble_sort(screen, array, bar_color):
     for i in range (0, len(array)):
-        if not stop_sorting:
-            __input_handling()
-            for j in range (0, len(array) - i - 1):
-                if not stop_sorting:
-                    bar_color[j] = RED
-                    bar_color[len(array) - i - 1] = GREEN
-                    # compare the elements by pair
-                    if array[j] > array[j + 1]:
-                        # swap to correct the order
-                        swap_bars(array, j, j + 1)
-                        # show bars on display
-                        __update_display(screen)
-                    bar_color[len(array) - i - 1] = WHITE
-                    bar_color[j] = WHITE
+        for j in range (0, len(array) - i - 1):
+            if not stop_sorting:
+                bar_color[j] = RED
+                bar_color[len(array) - i - 1] = GREEN
+                # compare the elements by pair
+                if array[j] > array[j + 1]:
+                    # swap to correct the order
+                    swap_bars(array, j, j + 1)
+                    # show bars on display
+                    __update_display(screen, array, bar_color)
+                bar_color[len(array) - i - 1] = WHITE
+                bar_color[j] = WHITE
 
 
 ########################## INSERTION SORT ############################
@@ -281,7 +276,7 @@ def insertion_sort(screen, arr, bar_color):
             arr[j + 1] = arr[j]
             j -= 1
             # display the bars      
-            __update_display(screen)
+            __update_display(screen, arr, bar_color)
             bar_color[j + 1] = WHITE
             bar_color[NUM_OF_BARS - 1] = WHITE
         arr[j + 1] = key
@@ -315,18 +310,18 @@ def __merge_sort(screen, arr, bar_color, begin, end):
             if arr[l] < arr[r]:
                 # update the display
                 bar_color[l] = GREEN
-                pygame.time.delay(1)
-                __update_display(screen)
-                bar_color[l] = WHITE
                 temp.append(arr[l])
+                pygame.time.delay(1)
+                __update_display(screen, arr, bar_color)
+                bar_color[l] = WHITE
                 l += 1
             else:
                 # update the display
                 bar_color[r] = GREEN
-                pygame.time.delay(1)
-                __update_display(screen)
-                bar_color[r] = WHITE
                 temp.append(arr[r])
+                pygame.time.delay(1)
+                __update_display(screen, arr, bar_color)
+                bar_color[r] = WHITE
                 r += 1
 
         # adding the leftover from the left subarray
@@ -338,7 +333,7 @@ def __merge_sort(screen, arr, bar_color, begin, end):
             bar_color[l] = WHITE
             # add to the array
             temp.append(arr[l])
-            __update_display(screen)
+            __update_display(screen, arr, bar_color)
             l += 1
 
         # adding the leftover from the right subarray
@@ -351,7 +346,7 @@ def __merge_sort(screen, arr, bar_color, begin, end):
             bar_color[r] = WHITE
             # add to the array
             temp.append(arr[r])
-            __update_display(screen)
+            __update_display(screen, arr, bar_color)
             r += 1
 
         i, j = begin, 0
@@ -363,7 +358,7 @@ def __merge_sort(screen, arr, bar_color, begin, end):
             bar_color[i] = RED
             arr[i] = temp[j]
             pygame.time.delay(3)
-            __update_display(screen)
+            __update_display(screen, arr, bar_color)
             bar_color[i] = WHITE
             i += 1
             j += 1
@@ -396,7 +391,7 @@ def __quick_sort(screen, arr, bar_color, begin, end):
 
                 # display the bars
                 pygame.time.delay(3)
-                __update_display(screen)
+                __update_display(screen, arr, bar_color)
                 bar_color[i] = WHITE
                 bar_color[j] = WHITE
 
@@ -409,5 +404,3 @@ def __quick_sort(screen, arr, bar_color, begin, end):
         # do the same process to the left partition and right partition
         __quick_sort(screen, arr, bar_color, pivot_index + 1, end)
         __quick_sort(screen, arr, bar_color, begin, pivot_index - 1)
-
-# end of sorting_visualiuzer.py 

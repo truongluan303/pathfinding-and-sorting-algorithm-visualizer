@@ -649,3 +649,5 @@ def quit():
     global looping
     looping = False
     pygame.display.quit()
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> end of pathfinding_visualizer.py <<<<<<<<<<<<<<<<<<<<<<<<<<<<<

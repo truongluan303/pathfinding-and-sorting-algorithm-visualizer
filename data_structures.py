@@ -201,3 +201,6 @@ class PriorityNode:
 
     def set_next(self, next):
         self.next = next
+
+        
+#>>>>>>>>>>>>>>>>>>>> end of data_structures.py <<<<<<<<<<<<<<<<<<<<

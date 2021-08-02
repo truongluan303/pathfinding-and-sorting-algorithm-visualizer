@@ -7,10 +7,9 @@ libraries used for GUI: pygame and tkinter
 
 
 !!! pygame must be installed for the program to run !!!
-
 the script install_pygame.py will automatically install pygame after being run
-
 So if pygame is not yet installed on your computer, just run the script once and it should be good
+
 
 Demo for Pathfinding Visualizer:
 
@@ -20,5 +19,6 @@ Demo for Pathfinding Visualizer:
 
 Demo for Sorting Visualizer:
 
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/83048295/127874474-8536ffb2-5e38-4962-b422-70d3e0e86ca3.gif)
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/83048295/127873822-46a75747-c9b7-44a9-8382-cd504928608f.gif)
 

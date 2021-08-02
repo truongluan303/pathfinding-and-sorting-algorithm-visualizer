@@ -32,7 +32,7 @@ class SortingVisualizer(Visualizer):
 
     def __init__(self) -> None:
         super().__init__(SCREEN_W, SCREEN_H + SHIFT_DOWN, 
-                        'Sorting Algorithms Visualizer')
+                        'Sorting Algorithms Visualizer', BLACK)
         #######  initialize variables  #######
         global looping, bar_list, font, bar_color, sorted, stop_sorting
         font = SysFont('consolas', 16, bold=True)       # the text font
@@ -150,9 +150,10 @@ class SortingVisualizer(Visualizer):
         switcher.get(self.algo)(self.screen, self.bar_list, self.bar_color)
 
         # refresh the screen display
-        show_bars(self.screen, self.bar_list, self.bar_color)
-        self.__create_instruction()
-        pygame.display.update()
+        if looping:
+            show_bars(self.screen, self.bar_list, self.bar_color)
+            self.__create_instruction()
+            pygame.display.update()
 
         # if the bars are all sorted, we add the running effect
         if looping and not stop_sorting:
@@ -244,10 +245,11 @@ def __input_handling():
 # including update the bar list display, the text display, and handle input
 #
 def __update_display(screen, bar_list, bar_color):
-    show_bars(screen, bar_list, bar_color)
-    __show_running_instruction(screen)
-    pygame.display.update()
-    __input_handling()
+    if looping:
+        show_bars(screen, bar_list, bar_color)
+        __show_running_instruction(screen)
+        pygame.display.update()
+        __input_handling()
 
 
 #######################################################################################

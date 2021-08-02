@@ -1,16 +1,19 @@
+#!/usr/bin/python
+
 import sys
 from sorting_visualizer import SortingVisualizer
 from pathfinding_visualizer import PathfindingVisualizer
 from tkinter import Tk, Label, Button, messagebox
+from os import getcwd
 
 
 # ask if user wants to quit
-def _on_closing():
+def _on_closing() -> None:
     if messagebox.askokcancel('Quit', 'Do you want to quit?'):
         sys.exit(0)
 
 # run the chosen visualizer
-def _visualize(root, option):
+def _visualize(root, option) -> None:
     root.wm_withdraw()  # hide menu
     # run visualizer
     if option == 1:
@@ -28,6 +31,7 @@ def main():
     # create the menu GUI
     root = Tk()
     root.geometry('600x370')
+    root.iconbitmap(getcwd() + "\\images\\algo_icon.ico")
     root.title('Pathfinding and Sorting Algorithms Visualizer')
     root.protocol("WM_DELETE_WINDOW", _on_closing)
 
@@ -58,5 +62,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 #>>>>>>>>>>>>> end of main.py <<<<<<<<<<<<<

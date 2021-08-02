@@ -2,10 +2,7 @@
 ######### LINKED QUEUE #######
 class Queue:
     def __init__(self):
-        self.size = 0
-        self.initialized = False
-        self.head = None
-        self.tail = None
+        self.reset()
 
     # check if the queue is empty
     def is_empty(self):
@@ -42,14 +39,15 @@ class Queue:
         if not self.is_initialized() or self.is_empty():
             raise Exception("Attempted to dequeue an empty queue!!!")
         temp = self.peek()
+        self.size -= 1
         self.head = self.head.get_next()
         if self.head is None:
-            self.tail = None
-        self.size -= 1
+            self.reset()       
         return temp
 
     # clear the queue
-    def clear(self):
+    def reset(self):
+        self.initialized = False
         self.head = None
         self.tail = None
         self.size = 0
@@ -60,7 +58,7 @@ class Queue:
 ####### LINKED STACK ########
 class Stack:
     def __init__(self):
-        self.head = Node(None)
+        self.head = None
         self.initialized = False
         self.size = 0
 
@@ -73,27 +71,29 @@ class Stack:
         return self.size == 0
 
     # add new node
+    # time complexity: O(1)
     def push(self, item):
         self.size += 1
         self.initialized = True
         new = Node(item)
-        new.set_next(self.head.get_next())
-        self.head.set_next(new)
+        new.set_next(self.head)
+        self.head = new
 
     # get the value in the front
+    # time complexity: O(1)
     def peek(self):
         if not self.is_initialized() or self.is_empty():
             raise Exception("Attempted to peek an empty stack!!!")
-        return self.head.get_next().get_value()
+        return self.head.get_value()
 
     # pop the value
     def pop(self):
         if not self.is_initialized() or self.is_empty():
             raise Exception("Attempted to pop an empty stack!!!")
-        topValue = self.peek()
-        self.head.set_next(self.head.get_next().get_next())
+        top_value = self.peek()
+        self.head = self.head.get_next()
         self.size -= 1
-        return topValue
+        return top_value
 
     # get the size of the stack
     def get_size(self):
@@ -108,29 +108,29 @@ class Stack:
 
 ###################################
 ######### PRIORITY QUEUE ##########
+
 class PriorityQueue:
     def __init__(self):
-        self.size = 0
-        self.head = None
-        self.tail = None
+        self.reset()
 
     # add new node to the queue
-    # The lower the priority is, the faster it gets to be out
-    def enqueue(self, val, priority):
+    # The lower the priority is, the faster it gets to be poped
+    def enqueue(self, val, priority=None):
         new_node = PriorityNode(val, priority)
         if self.is_empty():
             self.head = new_node
             self.tail = new_node
         else:
-            if priority > self.tail.get_priority():
+            if priority is None or priority > self.tail.get_priority():
                 self.tail.set_next(new_node)
                 self.tail = new_node
-            elif priority < self.head.get_priority():
+            elif priority <= self.head.get_priority():
                 new_node.set_next(self.head)
                 self.head = new_node
             else:
                 current = self.head
-                while current.get_next() is not None and current.get_next().get_priority() <= priority:
+                # find the right place to put the new node in according to the priority
+                while current.get_next() is not None and current.get_next().get_priority() < priority:
                     current = current.get_next()
                 temp = current.get_next()
                 current.set_next(new_node)
@@ -138,17 +138,20 @@ class PriorityQueue:
         self.size += 1
 
     # pop the node at the top of the queue
+    # time complexity: O(1)
     def dequeue(self):
         if self.is_empty():
             raise Exception('Attempted to dequeue an empty queue!!!')
-        # pop the head
-        temp = self.head
+        temp = self.peek()
         self.head = self.head.get_next()
-        temp.set_next(None)
         self.size -= 1
-        return temp.get_value()
+        # if the new head is None, it means the queue is empty
+        if self.head is None:
+            self.reset()
+        return temp
 
     # get the value in the front of the queue
+    # time complexity: O(1)
     def peek(self):
         if self.is_empty():
             raise Exception('Attempted to peek an empty queue!!!')
@@ -162,14 +165,20 @@ class PriorityQueue:
     def is_empty(self):
         return self.size == 0
 
+    def reset(self):
+        self.head = None
+        self.tail = None
+        self.size = 0
+
+
 
 
 #######################
 ######### NODE ########
 class Node:
-    def __init__(self, value = None):
+    def __init__(self, value, next=None):
         self.value = value
-        self.next = None
+        self.next = next
 
     def get_value(self):
         return self.value
@@ -202,5 +211,5 @@ class PriorityNode:
     def set_next(self, next):
         self.next = next
 
-        
+
 #>>>>>>>>>>>>>>>>>>>> end of data_structures.py <<<<<<<<<<<<<<<<<<<<

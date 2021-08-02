@@ -3,6 +3,7 @@ from random import randint
 from visualizer import Visualizer
 from pygame.constants import K_1, K_2, K_3, K_4, K_5
 from pygame.font import SysFont
+from os import getcwd
 
 BAR_WIDTH = 2
 NUM_OF_BARS = 500
@@ -31,10 +32,12 @@ stop_sorting = False    # check whether to stop the sorting process without quit
 class SortingVisualizer(Visualizer):
 
     def __init__(self) -> None:
+        icon = pygame.image.load(getcwd()+"\\images\\sort_icon.ico")
         super().__init__(SCREEN_W, SCREEN_H + SHIFT_DOWN, 
-                        'Sorting Algorithms Visualizer', BLACK)
-        #######  initialize variables  #######
+                        'Sorting Algorithms Visualizer', 
+                         BLACK, icon)
         global looping, bar_list, font, bar_color, sorted, stop_sorting
+        #######  initialize variables  #######
         font = SysFont('consolas', 16, bold=True)       # the text font
         self.algo_text_colors = [GREEN] * NUM_OG_ALGOS  # generate the bars' colors
         self.bar_list = None                            # list of bars to display
@@ -50,7 +53,7 @@ class SortingVisualizer(Visualizer):
     #
     # looping to show the display
     #
-    def __mainloop(self):
+    def __mainloop(self) -> None:
         while looping:
             super().draw()
             self.__input_handling()
@@ -58,7 +61,7 @@ class SortingVisualizer(Visualizer):
     #
     # handle keyboard and mouse input for the sorting begins
     #
-    def __input_handling(self):
+    def __input_handling(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -79,7 +82,7 @@ class SortingVisualizer(Visualizer):
     #
     # create the text instruction on top of the screen
     #
-    def __create_instruction(self):
+    def __create_instruction(self) -> None:
         y = 30
         pos_x1 = 700
         self.pos_x2 = 30
@@ -102,7 +105,7 @@ class SortingVisualizer(Visualizer):
     #
     # pick the algorithm to run
     #
-    def __choose_algo(self, chosen):
+    def __choose_algo(self, chosen) -> None:
         if chosen != -1:
             self.algo_text_colors[self.algo-1] = GREEN  # unhighlight the previously chosen
             self.algo = chosen                          # set the newly chosen one
@@ -113,7 +116,7 @@ class SortingVisualizer(Visualizer):
     #
     # shuffle the bars
     #
-    def __shuffle(self):
+    def __shuffle(self) -> None:
         global sorted
         self.bar_list = list(range(1, NUM_OF_BARS+1))   # generate the bars
         sorted = False                                  # set unsorted
@@ -130,7 +133,7 @@ class SortingVisualizer(Visualizer):
     #################
     # start sorting
     #
-    def __start(self):
+    def __start(self) -> None:
         global sorted, stop_sorting
         sorted = True
         stop_sorting = False 
@@ -172,14 +175,14 @@ class SortingVisualizer(Visualizer):
 #
 # display the text on the screen
 #
-def display_text(screen, string, pos_x, pos_y, color=GREEN):
+def display_text(screen, string, pos_x, pos_y, color=GREEN) -> None:
     text = font.render(string, False, color)
     screen.blit(text, (pos_x, pos_y))
 
 #
 # swap two bars
 #
-def swap_bars(arr, idx1, idx2):
+def swap_bars(arr, idx1, idx2) -> None:
     # swap the element in the array
     temp = arr[idx1]
     arr[idx1] = arr[idx2]
@@ -189,7 +192,7 @@ def swap_bars(arr, idx1, idx2):
 # since we cannot clear a specific object on the pygame display, 
 # we must clear the screen and re-display the bar list to show the changes on the list
 #
-def show_bars(screen, bar_list, bar_color):
+def show_bars(screen, bar_list, bar_color) -> None:
     screen.fill(BLACK)
     for i in range(len(bar_list)):
         __create_bar(screen, bar_list[i], i, bar_color[i])
@@ -197,7 +200,7 @@ def show_bars(screen, bar_list, bar_color):
 #
 # quit the visualizer and go back to menu screen
 #
-def quit():
+def quit() -> None:
     global looping, stop_sorting
     looping = False
     stop_sorting = True
@@ -206,7 +209,7 @@ def quit():
 #
 # display instruction text when the sorting process already begins
 #
-def __show_running_instruction(screen):
+def __show_running_instruction(screen) -> None:
     if not stop_sorting and looping:
         display_text(screen, 'ECS: Exit visualizer', 30, 10)
         display_text(screen, 'C: Stop sorting', 30, 30)
@@ -214,7 +217,7 @@ def __show_running_instruction(screen):
 #
 # create the a bar with specific characteristics
 #
-def __create_bar(screen, value, index, color):
+def __create_bar(screen, value, index, color) -> None:
     pos_x = index * BAR_WIDTH + BAR_WIDTH
     pos_y = SCREEN_H + SHIFT_DOWN
     height = value
@@ -227,7 +230,7 @@ def __create_bar(screen, value, index, color):
 #
 # handle keyboard and mouse input after the sorting begins
 #
-def __input_handling():
+def __input_handling() -> None:
     global stop_sorting, sorted
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -244,7 +247,7 @@ def __input_handling():
 # update the screen display
 # including update the bar list display, the text display, and handle input
 #
-def __update_display(screen, bar_list, bar_color):
+def __update_display(screen, bar_list, bar_color) -> None:
     if looping:
         show_bars(screen, bar_list, bar_color)
         __show_running_instruction(screen)
@@ -259,7 +262,7 @@ def __update_display(screen, bar_list, bar_color):
 
 ######################### SELECTION SORT #########################
 
-def selection_sort(screen, array, bar_color):
+def selection_sort(screen, array, bar_color) -> None:
     for i in range (0, len(array)):
         min = array[i]
         for j in range (i, len(array)):
@@ -279,7 +282,7 @@ def selection_sort(screen, array, bar_color):
 
 ######################### BUBBLE SORT #############################
 
-def bubble_sort(screen, array, bar_color):
+def bubble_sort(screen, array, bar_color) -> None:
     for i in range (0, len(array)):
         for j in range (0, len(array) - i - 1):
             if not stop_sorting:
@@ -297,7 +300,7 @@ def bubble_sort(screen, array, bar_color):
 
 ########################## INSERTION SORT ############################
 
-def insertion_sort(screen, arr, bar_color):
+def insertion_sort(screen, arr, bar_color) -> None:
     # Traverse through 1 to len(arr)
     for i in range(1, len(arr)):
         key = arr[i]
@@ -320,7 +323,7 @@ def insertion_sort(screen, arr, bar_color):
 
 ############################# MERGE SORT ##########################
 
-def merge_sort(screen, arr, bar_color):
+def merge_sort(screen, arr, bar_color) -> None:
     __merge_sort(screen, arr, bar_color, 0, len(arr)-1)
 
 def __merge_sort(screen, arr, bar_color, begin, end):
@@ -402,11 +405,11 @@ def __merge_sort(screen, arr, bar_color, begin, end):
 ############################# QUICK SORT ############################
 
 # helper function
-def quick_sort(screen, arr, bar_color):
+def quick_sort(screen, arr, bar_color) -> None:
     __quick_sort(screen, arr, bar_color, 0, len(arr)-1)
 
 
-def __quick_sort(screen, arr, bar_color, begin, end):
+def __quick_sort(screen, arr, bar_color, begin, end) -> None:
     if (begin < end):
         pivot = arr[end]
         j = begin - 1

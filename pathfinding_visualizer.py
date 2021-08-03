@@ -44,8 +44,8 @@ class PathfindingVisualizer(Visualizer):
         self.generated = False          # if random barriers are already generated
 
         ##### initialize the screen display #####
-        icon = pygame.image.load(getcwd()+"\\images\\path_icon.ico")
-        super().__init__(WIN_W, WIN_H, 'Pathfinding Visualizer', BLACK, icon)
+        icon_path = getcwd() + "\\images\\path_icon.ico"
+        super().__init__(WIN_W, WIN_H, 'Pathfinding Visualizer', BLACK, icon_path)
         self.__show_instruction_text()    # show the instruction text
         self.__create_blocks()            # create the blocks for the grid
         self.__mainloop()

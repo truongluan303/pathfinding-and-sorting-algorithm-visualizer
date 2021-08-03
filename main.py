@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+from os import path
 from sorting_visualizer import SortingVisualizer
 from pathfinding_visualizer import PathfindingVisualizer
 from tkinter import Tk, Label, Button, messagebox
@@ -31,9 +32,10 @@ def main():
     # create the menu GUI
     root = Tk()
     root.geometry('600x370')
-    root.iconbitmap(getcwd() + "\\images\\algo_icon.ico")
     root.title('Pathfinding and Sorting Algorithms Visualizer')
     root.protocol("WM_DELETE_WINDOW", _on_closing)
+    if path.exists(getcwd()+"\\images\\algo_icon.ico"):
+        root.iconbitmap(getcwd()+"\\images\\algo_icon.ico")
 
     text = Label(root, text='Please choose the type of visualizer:',
                  font='Courier 15 bold', pady='30')

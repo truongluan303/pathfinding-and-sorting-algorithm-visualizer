@@ -1,3 +1,4 @@
+from genericpath import exists
 import pygame
 from random import randint
 from visualizer import Visualizer
@@ -32,10 +33,10 @@ stop_sorting = False    # check whether to stop the sorting process without quit
 class SortingVisualizer(Visualizer):
 
     def __init__(self) -> None:
-        icon = pygame.image.load(getcwd()+"\\images\\sort_icon.ico")
+        icon_path = getcwd() + "\\images\\sort_icon.ico"
         super().__init__(SCREEN_W, SCREEN_H + SHIFT_DOWN, 
                         'Sorting Algorithms Visualizer', 
-                         BLACK, icon)
+                         BLACK, icon_path)
         global looping, bar_list, font, bar_color, sorted, stop_sorting
         #######  initialize variables  #######
         font = SysFont('consolas', 16, bold=True)       # the text font

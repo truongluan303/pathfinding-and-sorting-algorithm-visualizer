@@ -2,9 +2,9 @@
 A Visualizer for:
   - Pathfinding algorithms including A*, Dijkstra, Breadth First Search, and Depth First Search
   - Sorting algorithms including selection sort, bubble sort, insertion sort, merge sort, and quick sort
+The program uses Manhattan distance. Therefore, there won't be diagonal path.
 
 libraries used for GUI: pygame and tkinter
-
 
 !!! pygame must be installed for the program to run !!!
 the script install_pygame.py will automatically install pygame after being run

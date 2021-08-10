@@ -8,7 +8,8 @@ A Visualizer for:
 libraries used for GUI: pygame and tkinter
 
 !!! pygame must be installed for the program to run !!!
-the there is a python script in folder INSTALL_REQUIRED_LIBRARIES_HERE that will automatically install pygame after being run.
+
+There is a python script in folder INSTALL_REQUIRED_LIBRARIES_HERE that will automatically install pygame after being run.
 So if pygame is not yet installed on your computer, just run the script once and it should be good. After installing the required libraries,
 the folder above can be deleted.
 

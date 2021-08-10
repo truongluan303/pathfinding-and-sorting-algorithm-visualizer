@@ -28,6 +28,9 @@ if __name__ == "__main__":
 
     # make sure pip is installed first
     os.system(sys.executable + " " + os.getcwd() + "\install_pygame\get_pip.py")
+    
+    _ = input("Press Enter to continue...")
+    clear_screen()
 
     # install pygame
     install('pygame')

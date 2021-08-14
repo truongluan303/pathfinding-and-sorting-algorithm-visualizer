@@ -27,7 +27,7 @@ def clear_screen():
 if __name__ == "__main__":
 
     # make sure pip is installed first
-    os.system(sys.executable + " " + os.getcwd() + "\install_pygame\get_pip.py")
+    os.system(sys.executable + " " + os.getcwd() + "\INSTALL_REQUIRED_LIBRAIES_HERE\get_pip.py")
     
     _ = input("Press Enter to continue...")
     clear_screen()

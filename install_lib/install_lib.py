@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Author: Hoang Truong
 
 ##################################################################
 ###  a script to automatically upgrade pip and install pygame  ###
@@ -9,12 +10,12 @@ import os
 import subprocess
 
 
-def install(package):
+def __install(package):
     # install package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
-def clear_screen():
+def __clear_screen():
     if os.name == 'nt':
         os.system('cls')
     else:
@@ -22,19 +23,15 @@ def clear_screen():
 
 
 
-if __name__ == "__main__":
+def install_required_libraries():
 
     # make sure pip is installed first
-    os.system(sys.executable + " " + os.getcwd() + "\INSTALL_REQUIRED_LIBRARIES_HERE\get_pip.py")
+    os.system(sys.executable + " " + os.getcwd() + "/install_lib/get_pip.py")
     
-    _ = input("Press Enter to continue...")
-    clear_screen()
-
     # install pygame
-    install('pygame')
+    __install('pygame')
 
-    # clear screen and exit
-    clear_screen()
+    # clear screen and inform that the process is finished
+    __clear_screen()
     print("---FINISHED---")
-    _ = input("Press Enter to continue...")
-    clear_screen()
+    __clear_screen

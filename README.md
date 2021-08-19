@@ -4,15 +4,7 @@ A Visualizer for:
   - Sorting algorithms including selection sort, bubble sort, insertion sort, merge sort, and quick sort
 
 *** For the pathfinding visualizer, the program uses Manhattan distance. Therefore, there won't be diagonal path.
-
-libraries used for GUI: pygame and tkinter
-
-!!! pygame must be installed for the program to run !!!
-
-There is a python script in folder INSTALL_REQUIRED_LIBRARIES_HERE that will automatically install pygame after being run.
-So if pygame is not yet installed on your computer, just run the script once and it should be good. After installing the required libraries,
-the folder above can be deleted.
-
+*** The program requires pygame to be installed. so if pygame is not already installed, the program wil automatically installed it when running.
 
 Demo for Pathfinding Visualizer:
 

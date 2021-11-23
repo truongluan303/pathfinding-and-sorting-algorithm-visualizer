@@ -33,4 +33,3 @@ def install_required_libraries():
     # clear screen and inform that the process is finished
     __clear_screen()
     print("---FINISHED---")
-    __clear_screen

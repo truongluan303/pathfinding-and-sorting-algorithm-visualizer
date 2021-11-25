@@ -1,17 +1,23 @@
 import pygame
 from os import path
 
+
 ###############################################
 ### THE PARENT CLASS FOR THE TWO VISUALIZER ###
 #---------------------------------------------#
+
 class Visualizer:
+    '''
+    A general GUI in pygame for visualizing algorithms
+    '''
+
     def __init__(self, width, height, title, color=(0,0,0), icon_path=None) -> None:
         # initialize pygame
         pygame.init()               
         # initialize the display
-        self.screen = pygame.display.set_mode((width, height))
-        self.screen.fill(color)
-        self.clock = pygame.time.Clock()
+        self._screen = pygame.display.set_mode((width, height))
+        self._screen.fill(color)
+        self._clock = pygame.time.Clock()
         pygame.display.set_caption(title)
         if icon_path is not None:
             if path.exists(icon_path):
@@ -21,4 +27,4 @@ class Visualizer:
 
     def draw(self):
         pygame.display.update()
-        self.clock.tick(60)
+        self._clock.tick(60)

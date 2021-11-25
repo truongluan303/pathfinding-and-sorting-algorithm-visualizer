@@ -5,7 +5,7 @@ A Visualizer for:
 
 *** For the pathfinding visualizer, the program uses Manhattan distance. Therefore, there won't be diagonal path.
 
-*** The program requires pygame to be installed. so if pygame is not already installed, the program wil automatically installed it when running.
+*** The program requires pygame and PyQt5 to be installed. So if pygame and/or PyQt5 are not already installed, the program wil automatically installed them when running.
 
 ## Demo for Pathfinding Visualizer:
 

@@ -9,9 +9,11 @@ import os
 import subprocess
 
 
-def __install(package):
+def __install(package: str):
     # install package
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+
 
 
 def __clear_screen():
@@ -22,14 +24,16 @@ def __clear_screen():
 
 
 
+
 def install_required_libraries():
 
     # make sure pip is installed first
     os.system(sys.executable + " " + os.getcwd() + "/install_lib/get_pip.py")
     
-    # install pygame
+    # install pygame and PyQt5
     __install('pygame')
+    __install('PyQt5')
 
     # clear screen and inform that the process is finished
     __clear_screen()
-    print("---FINISHED---")
+    print("--- FINISHED INSTALLATIONS ---")

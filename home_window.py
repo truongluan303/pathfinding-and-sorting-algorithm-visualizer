@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 
 
 
@@ -59,9 +59,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Algorithms Visualizer"))
-        self.pushButton.setText(_translate("MainWindow", "Pathfinding Algorithms Visualizer"))
-        self.pushButton_2.setText(_translate("MainWindow", "Sorting Algorithms Visualizer"))
-        self.label.setText(_translate("MainWindow", "Please Choose The Type Of Visualizer To Continue"))
+        self.pushButton.setText(_translate("MainWindow", "Pathfinding Visualizer"))
+        self.pushButton_2.setText(_translate("MainWindow", "Sorting Visualizer"))
+        self.label.setText(_translate("MainWindow", "Please Choose The Type Of Visualizer"))
 
 
 
@@ -88,11 +88,3 @@ class HomeWindow(QMainWindow, Ui_MainWindow):
         else:
             if not type(event) == bool:
                 event.ignore()
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    frame = HomeWindow()
-    frame.show()
-    app.exec_()

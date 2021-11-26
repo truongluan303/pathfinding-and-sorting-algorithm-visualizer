@@ -27,12 +27,13 @@ def __clear_screen():
 
 def install_required_libraries():
 
+    print(">>> Installing Dependencies...\n\n")
+
     # make sure pip is installed first
     os.system(sys.executable + " " + os.getcwd() + "/install_lib/get_pip.py")
     
-    # install pygame and PyQt5
+    # install pygame
     __install('pygame')
-    __install('PyQt5')
 
     # clear screen and inform that the process is finished
     __clear_screen()

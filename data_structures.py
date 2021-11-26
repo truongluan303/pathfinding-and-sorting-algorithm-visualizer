@@ -4,10 +4,10 @@ T = TypeVar('T')
 
 
 
-##############################
-######### LINKED QUEUE #######
 
 class Queue(Generic[T]):
+    ''' Linked Queue '''
+
     def __init__(self) -> None:
         self.reset()
 
@@ -69,10 +69,11 @@ class Queue(Generic[T]):
 
 
 
-#############################
-####### LINKED STACK ########
+
 
 class Stack(Generic[T]):
+    ''' Linked Stack '''
+
     def __init__(self) -> None:
         self.clear()
 
@@ -131,17 +132,18 @@ class Stack(Generic[T]):
 
 
 
-###################################
-######### PRIORITY QUEUE ##########
+
 
 class PriorityQueue(Generic[T]):
+    ''' Priority Queue '''
+
     def __init__(self) -> None:
         self.reset()
 
     # add new node to the queue
     # The lower the priority is, the faster it gets to be poped
     def enqueue(self, val: T, priority:float=None) -> None:
-        new_node = PriorityNode[T](val, priority)
+        new_node = PriorityNode(val, priority)
         if self.is_empty():
             self._head = new_node
             self._tail = new_node
@@ -199,10 +201,10 @@ class PriorityQueue(Generic[T]):
 
 
 
-#######################
-######### NODE ########
+
 
 class Node(Generic[T]):
+    ''' Linked List Node '''
 
     def __init__(self, value: T, next=None) -> None:
         self._value = value
@@ -220,26 +222,19 @@ class Node(Generic[T]):
 
 
 
-#######################
-#### PRIORITY NODE ####
 
-class PriorityNode(Generic[T]):
-    def __init__(self, value: T, priority: float, next=None) -> None:
-        self._value = value
+
+class PriorityNode(Node):
+    ''' Priority Node '''
+
+    def __init__(self, value, priority: float, next_node=None) -> None:
+        super().__init__(value, next_node)
         self._priority = priority
-        self._next = next
-
-    def get_value(self) -> T:
-        return self._value
 
     def get_priority(self) -> float:
         return self._priority
 
-    def get_next(self):
-        return self._next
 
-    def set_next(self, next):
-        self._next = next
 
 
 #>>>>>>>>>>>>>>>>>>>> end of data_structures.py <<<<<<<<<<<<<<<<<<<<

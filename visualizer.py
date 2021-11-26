@@ -28,3 +28,7 @@ class Visualizer:
     def draw(self):
         pygame.display.update()
         self._clock.tick(60)
+
+
+
+''' end of visualizer.py '''

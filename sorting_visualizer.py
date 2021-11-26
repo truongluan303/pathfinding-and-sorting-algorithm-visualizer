@@ -474,4 +474,5 @@ def __quick_sort(screen, arr, bar_color, begin, end) -> None:
         __quick_sort(screen, arr, bar_color, begin, pivot_index - 1)
 
 
+
 #>>>>>>>>>>>>>>>>>>>>>>>>>> end of sorting_visualizer.py <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

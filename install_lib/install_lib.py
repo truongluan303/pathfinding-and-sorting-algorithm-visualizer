@@ -28,12 +28,17 @@ def __clear_screen():
 def install_required_libraries():
 
     print(">>> Installing Dependencies...\n\n")
-
-    # make sure pip is installed first
-    os.system(sys.executable + " " + os.getcwd() + "/install_lib/get_pip.py")
     
-    # install pygame
-    __install('pygame')
+    try:
+        # install pygame
+        __install('pygame')
+    except:
+        if sys.platform == 'win32' or sys.platform == 'darwin':
+            os.system(sys.executable + " " + os.getcwd() + "/install_lib/get_pip.py")
+        else:
+            os.system('sudo apt-get update')
+            os.system('sudo apt-get install python3-pip')
+        __install('pygame')
 
     # clear screen and inform that the process is finished
     __clear_screen()

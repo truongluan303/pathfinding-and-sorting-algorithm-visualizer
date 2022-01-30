@@ -2,9 +2,11 @@ import pygame
 import random
 import sys
 from os import getcwd
+from sorting_visualizer import RED
 from visualizer import Visualizer
 from pygame.constants import K_1, K_2, K_3, K_4
 from data_structures import Queue, Stack, PriorityQueue
+from typing import List
 
 
 
@@ -45,11 +47,13 @@ class PathfindingVisualizer(Visualizer):
         self._generated = False          # if random barriers are already generated
 
         ##### initialize the screen display #####
-        icon_path = getcwd() + "\\images\\path_icon.ico"
+        icon_path = getcwd() + "/images/path_icon.ico"
         super().__init__(WIN_W, WIN_H, 'Pathfinding Visualizer', BLACK, icon_path)
         self.__show_instruction_text()    # show the instruction text
         self.__create_blocks()            # create the blocks for the grid
         self.__mainloop()
+
+
 
 
     def __mainloop(self):
@@ -57,11 +61,13 @@ class PathfindingVisualizer(Visualizer):
             super().draw() 
             self.__input_handling()
                        
-    #
-    # handle mouse and keyboard input from user
-    #
-    def __input_handling(self) -> None:
 
+
+
+    def __input_handling(self) -> None:
+        """
+        Handle mouse and keyboard input from user
+        """
         # if the left mouse is pressed -> draw barrier
         if pygame.mouse.get_pressed() == (1,0,0):
             pos = pygame.mouse.get_pos()
@@ -124,10 +130,13 @@ class PathfindingVisualizer(Visualizer):
                     else:
                         self.__update_block_clicked(pos, "end")
 
-    #
-    # create and add the blocks on the grid
-    #
+
+
+
     def __create_blocks(self) -> None:
+        """
+        create and add the blocks on the grid
+        """
         # add new blocks
         for i in range(BLOCKS_EACH_LINE):
             self._grid.append([])
@@ -141,12 +150,16 @@ class PathfindingVisualizer(Visualizer):
         # iniitalize the start and end blocks
         self.__init_start_end_points()              
 
-    #
-    # display the instruction text on the side of our grid 
-    #
+
+
+
     def __show_instruction_text(self) -> None:
+        """
+        Display the instruction text on the right side of the grid
+        """
         pos_y = 20
         self.font = pygame.font.SysFont('consolas', 16, bold=True)
+        
         # the list of instructions to display
         instruction_list = [
             "Left Click: Draw Barrier",
@@ -160,34 +173,45 @@ class PathfindingVisualizer(Visualizer):
             "", "",
             "CHOOSE SEARCH ALGORITHM",
             "press a corressponding number:",]
+        
         # show all the instructions on the screen
         for string in instruction_list:
             text = self.font.render(string, False, GREEN)
             self._screen.blit(text, (SIZE + 10, pos_y))
             pos_y += 25
+            
         ### display the list of algorithms to choose below the instruction text
+        
         # list of algorithms' names
         self.algo_names = [
             "   1: A* algorithm",
             "   2: Dijkstra algorithm",
             "   3: Breadth First Search",
             "   4: Depth First Search"]
+        
         self.algo_text = []     # rendered text for the algorithms names
         self.algo_pos_y = []    # y position for each algorithm text
+        
         for i in range (0, len(self.algo_names)):
             self.algo_pos_y.append(pos_y)
             self.algo_text.append(self.font.render(
                 self.algo_names[i], False, GREEN))
             self._screen.blit(self.algo_text[i], (SIZE+10, self.algo_pos_y[i]))
             pos_y += 25
+            
         # default algorithm is A star
         self.algo_picked = 1
         self.__pick_algo(1)
 
-    #
-    # actions made when a user choose an algorithm
-    #
+
+
+
     def __pick_algo(self, n: int) -> None:
+        """
+        Action made when the user chooses an algorithm to visualize
+        Args:
+            n (int): the number associated to the algorithm
+        """
         if n != -1:
             # reset the previously chosen algorithm text to green
             self.algo_text[self.algo_picked-1] = self.font.render(
@@ -204,10 +228,16 @@ class PathfindingVisualizer(Visualizer):
             # set the chosen algorithm
             self.algo_picked = n
 
-    #
-    # get the block that was clicked and change its status
-    #
+
+
+
     def __update_block_clicked(self, pos: tuple, status: str) -> None:
+        """
+        Get the block that was clicked and change its status
+        Args:
+            pos (tuple): position of the block
+            status (str): the status to be changed to
+        """
         x, y = pos
         if x < SIZE and y < SIZE:
             # get the index of the block clicked
@@ -232,11 +262,13 @@ class PathfindingVisualizer(Visualizer):
                     self.end_point = (x, y)
                     self._grid[x][y].set_end()
 
-    #
-    # reset the grids to initial state 
-    # (no barriers, start and end blocks are at top and bottom)
-    #
+
+
+
     def __clear(self) -> None:
+        """
+        Reset the grids to its initial state
+        """
         # reset all the blocks on the screen
         for i in range(BLOCKS_EACH_LINE):
             for j in range(BLOCKS_EACH_LINE):
@@ -244,10 +276,13 @@ class PathfindingVisualizer(Visualizer):
         # put the start and end blocks to default locations
         self.__init_start_end_points()
 
-    #
-    # randomly generate barrier/obstacles on the grid
-    #
+
+
+
     def __generate_obstacles(self) -> None:
+        """
+        Randomly generate the obstacles on the grid
+        """
         # generate the obstacles randomly
         for _ in range(SIZE * 4 // 3):
             rand_x = random.randint(0, BLOCKS_EACH_LINE - 1)
@@ -272,28 +307,36 @@ class PathfindingVisualizer(Visualizer):
                             if not self._grid[ex+i][ey+j].is_end_block():
                                 self._grid[ex+i][ey+j].set_walkable()
     
-    #
-    # put the start and end blocks to the default locations
-    #
+
+
+
     def __init_start_end_points(self) -> None:
+        """
+        Put the start and end blocks to their default locations
+        """
         self.start_point = START_POS
         self.end_point = END_POS
         self._grid[START_POS[0]][START_POS[1]].set_start()
         self._grid[END_POS[0]][END_POS[1]].set_end()
         
-    #
-    # check the neighbors for each block on the grid
-    #
+
+
+
     def __check_all_neighbors(self) -> None:
+        """
+        Update the neighbors for each block on the grid
+        """
         for row in self._grid:
             for block in row:
                 block.update_neighbors(self._grid)
 
     
-    ##################################
-    # start the path finding process #
-    #
+
+
     def __start_finding(self) -> None:
+        """
+        Start the pathfinind process
+        """
         self._cleared = False
         start_block = self._grid[self.start_point[0]][self.start_point[1]]
         switch = {
@@ -328,6 +371,13 @@ class Block():
 
 
     def __init__(self, screen, x, y, effect=True) -> None:
+        """
+        Args:
+            screen ([type]): the screen where the block will be placed on
+            x ([type]): the x-coordinate of the block
+            y ([type]): the y-coordinate of the block
+            effect (bool, optional): true to make the expanding effect (defaults to True)
+        """
         self._screen = screen        # root screen to dislay the block
         self.x, self.y = x, y       # row and column index where the block is at
         self.neighbors = []         # the list of neighbors
@@ -375,10 +425,14 @@ class Block():
     def get_parent(self):
         return self.parent
 
-    #
-    # update the color status for the block on the screen
-    #
+
     def __update_status(self, color_status, effect=True) -> None:
+        """
+        Update the color status for the block
+        Args:
+            color_status ([type]): the new color of the block
+            effect (bool, optional): true to make the expanding effect (defaults to True)
+        """
         self.color = color_status                                   # set the color_status
         pygame.draw.rect(self._screen, color_status, self.rect)     # draw block with new color
 
@@ -390,43 +444,83 @@ class Block():
 
 
     def set_path(self) -> None:
+        """
+        Set the status of the current block to be a part of the path
+        """
         self.__update_status(self.PATH)
 
+
     def set_barrier(self) -> None:
+        """
+        Set the status of the current block to be an obstacle/barrier
+        """
         self.__update_status(self.BARRIER)
 
+
     def set_walkable(self) -> None:
+        """
+        Set the current block's status to be walkable
+        """
         self.__update_status(self.WALKABLE)
+        
 
     def set_start(self) -> None:
+        """
+        Set the current block to be the start block
+        """
         self.__update_status(self.START)
 
+
     def set_end(self) -> None:
+        """
+        Set the current block to be the end block
+        """
         self.__update_status(self.END)
 
+
     def set_next(self) -> None:
+        """
+        Set the status to be the next block
+        """
         if self.is_walkable():
             self.__update_status(self.NEXT_TO_VISIT)
 
+
     def set_parent(self, parent) -> None:
+        """
+        Set the parent block for the current block
+        Args:
+            parent ([type]): the parent block
+        """
         self.parent = parent
 
+
     def set_visited(self) -> None:
+        """
+        Set the status to be visited
+        """
         self.was_visited = True
         if self.is_walkable() or self.is_next():
             self.__update_status(self.VISITED)
 
+
     def reset(self) -> None:
+        """
+        Reset the block
+        """
         self.__update_status(self.WALKABLE, False)
         self.was_visited = False
         self.neighbors = []
         self.parent = None
 
-    #
-    # check the 4 directions (North, East, South, West) around the block
-    # and add the neighbor block to this block's list of neighbors if qualified
-    #
+
     def update_neighbors(self, grid) -> None:
+        """
+        Check the 4 directions (N, E, S, W) around the block and add the neighbor
+        block to this block's list of neighbors if qualified
+        Args:
+            grid ([type]): the grid containing all blocks
+        """
         # make sure the index does not go out of the array's range
         north_has_block = self.x > 0
         south_has_block = self.x < BLOCKS_EACH_LINE - 1
@@ -462,10 +556,17 @@ class Block():
 #######################################################################################
 
 
+
+
 ############################
 #### DEPTH FIRST SEARCH ####
 
 def depth_first(start_block: Block) -> None:
+    """
+    Depth first search algorithm
+    Args:
+        start_block (Block): the start block
+    """
     found = False
     stack = Stack()
     # initialize the stack with the stack block
@@ -487,15 +588,19 @@ def depth_first(start_block: Block) -> None:
         if found:
             # backtrack to show the path
             __backtrack(current.get_parent())
-        else:
-            # if there's no path, display the information
-            __path_not_found()
+
+
 
 
 ##############################
 #### BREADTH FIRST SEARCH ####
 
 def breadth_first(start_block: Block) -> None:
+    """
+    Breadth first search algorithm
+    Args:
+        start_block (Block): the start block
+    """
     found = False
     queue = Queue()
     # initialize the queue with the start block
@@ -517,15 +622,20 @@ def breadth_first(start_block: Block) -> None:
         if found:
             # backtrack to show the path
             __backtrack(current.get_parent())
-        else:
-            # if there's no path, then display the information
-            __path_not_found()
+
+
 
 
 ############################
 #### DIJKSTRA ALGORITHM ####
 
 def dijkstra(grid, start_block: Block) -> None:
+    """
+    Dijkstra algorithm
+    Args:
+        grid ([type]): the grid containing all blocks
+        start_block (Block): the start block
+    """
     found = False
     prio_queue = PriorityQueue()
     # initially assign infinity to the distance from each block to start block
@@ -561,14 +671,21 @@ def dijkstra(grid, start_block: Block) -> None:
     if _looping:
         if found:
             __backtrack(current.get_parent())
-        else:
-            __path_not_found()
+
+
 
 
 ######################
 #### A* ALGORITHM ####
 
 def a_star(grid, start_block: Block, end_pos: tuple) -> None:
+    """
+    A* algorithm
+    Args:
+        grid ([type]): the grid containing all blocks
+        start_block (Block): the starting block
+        end_pos (tuple): the position of the end block
+    """
     found = False
     p_queue = PriorityQueue()
     # for each block on the grid
@@ -612,13 +729,14 @@ def a_star(grid, start_block: Block, end_pos: tuple) -> None:
     if _looping:
         if found:
             __backtrack(current.get_parent())
-        else:
-            __path_not_found()
 
-#
-# calculate the heuristic distance for a block
-#
+
+
+
 def __get_heuristic(block: Block, end_pos: tuple) -> float:
+    """
+    Calculate the heuristic distance for a block
+    """
     block_pos = block.get_position()
     x = abs(block_pos[0] - end_pos[0])
     y = abs(block_pos[1] - end_pos[1])
@@ -626,18 +744,25 @@ def __get_heuristic(block: Block, end_pos: tuple) -> float:
 
 ##############################################################################
 
-#
-# backtracking to show the shortest path
-#
+
+
 def __backtrack(root: Block) -> None:
+    """
+    Backtrack to highlight the shortest path
+    Args:
+        root (Block): the previous block visitted
+    """
     while not root.is_start_block():
         root.set_path()             # set the block to be part of the path
         root = root.get_parent()    # keep backtracking
 
-#
-# handle mouse and keyboard input when the pathfinding process is running
-#
+
+
+
 def __input_handling() -> None:
+    """
+    Handle mouse and keyboard input when the pathfininding process is running
+    """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
@@ -646,20 +771,13 @@ def __input_handling() -> None:
             if event.key == pygame.K_ESCAPE:
                 quit()
 
-#
-# In case where there is no walkable path between start and end blocks,
-# create a pop up message to inform the user
-#
-def __path_not_found() -> None:
-    msg_box = QMessageBox()
-    msg_box.setText("There is no Valid Path!")
-    msg_box.exec()
 
 
-#
-# close the pygame display without killing the program
-#
+
 def quit() -> None:
+    """
+    Close the pathfininding visualizer and re-open the home screen
+    """
     global _looping
     _looping = False
     pygame.display.quit()

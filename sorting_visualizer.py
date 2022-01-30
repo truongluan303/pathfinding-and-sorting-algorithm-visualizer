@@ -37,7 +37,7 @@ _stop_sorting = False       # check whether to stop the sorting process without 
 class SortingVisualizer(Visualizer):
 
     def __init__(self) -> None:
-        icon_path = getcwd() + "\\images\\sort_icon.ico"
+        icon_path = getcwd() + "/images/sort_icon.ico"
         super().__init__(SCREEN_W, SCREEN_H + SHIFT_DOWN, 
                         'Sorting Algorithms Visualizer', 
                          BLACK, icon_path)
@@ -55,18 +55,24 @@ class SortingVisualizer(Visualizer):
         self.__shuffle()
         self.__mainloop()
 
-    #
-    # _looping to show the display
-    #
+
+
+
     def __mainloop(self) -> None:
+        """
+        mainloop to keep the screen displayed
+        """
         while _looping:
             super().draw()
             self.__input_handling()
 
-    #
-    # handle keyboard and mouse input for the sorting begins
-    #
+
+
+
     def __input_handling(self) -> None:
+        """
+        handle the keyboard and mouse input before the sorting begins
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -84,10 +90,13 @@ class SortingVisualizer(Visualizer):
                     switch = {K_1: 1, K_2: 2, K_3: 3, K_4: 4, K_5: 5}
                     self.__choose_algo(switch.get(event.key, -1))
 
-    #
-    # create the text instruction on top of the screen
-    #
+
+
+
     def __create_instruction(self) -> None:
+        """
+        create the text instruction on the top of the screen
+        """
         y = 30
         pos_x1 = 700
         self.pos_x2 = 30
@@ -107,10 +116,15 @@ class SortingVisualizer(Visualizer):
                         self.pos_x2, y, self._algo_text_colors[i])
             y += 20
 
-    #
-    # pick the algorithm to run
-    #
+
+
+
     def __choose_algo(self, chosen) -> None:
+        """
+        pick the algorithm to run
+        Args:
+            chosen ([type]): the chosen algorithm
+        """
         if chosen != -1:
             self._algo_text_colors[self._algo - 1] = GREEN  # unhighlight the previously chosen
             self._algo = chosen                             # set the newly chosen one
@@ -118,10 +132,12 @@ class SortingVisualizer(Visualizer):
             self.__create_instruction()                     # update the display
             
         
-    #
-    # shuffle the bars
-    #
+
+
     def __shuffle(self) -> None:
+        """
+        shuffle the bars
+        """
         global _is_sorted
         self._bar_list = list(range(1, NUM_OF_BARS+1))   # generate the bars
         _is_sorted = False                                  # set un_is_sorted
@@ -135,10 +151,12 @@ class SortingVisualizer(Visualizer):
         self.__create_instruction()                             # show the text
 
 
-    #################
-    # start sorting
-    #
+
+
     def __start(self) -> None:
+        """
+        start the sorting process
+        """
         global _is_sorted, _stop_sorting
         _is_sorted = True
         _stop_sorting = False 
@@ -180,41 +198,58 @@ class SortingVisualizer(Visualizer):
 
 
 
-#
-# display the text on the screen
-#
 def display_text(screen, string, pos_x, pos_y, color=GREEN) -> None:
+    """
+    display the text on the screen
+    Args:
+        screen ([type]): the screen to show the text on
+        string ([type]): the text
+        pos_x ([type]): the x-coordinate where the text is located
+        pos_y ([type]): the y-coordinate where the text is located
+        color ([type], optional): text color (defaults to green)
+    """
     text = _font.render(string, False, color)
     screen.blit(text, (pos_x, pos_y))
 
 
 
-#
-# swap two bars
-#
+
 def swap_bars(arr, idx1, idx2) -> None:
-    # swap the element in the array
+    """
+    swap 2 bars
+    Args:
+        arr ([type]): the array
+        idx1 ([type]): the index of the 1st bar
+        idx2 ([type]): the index of the 2nd bar
+    """
     temp = arr[idx1]
     arr[idx1] = arr[idx2]
     arr[idx2] = temp
 
 
 
-#
-# since we cannot clear a specific object on the pygame display, 
-# we must clear the screen and re-display the bar list to show the changes on the list
-#
+
 def show_bars(screen, bar_list, bar_color) -> None:
+    """
+    update the bars on the screen
+    Args:
+        screen ([type]): the screen
+        bar_list ([type]): the list of the bars
+        bar_color ([type]): the bars' color
+    """
+    # since we cannot clear a specific object on the pygame display, 
+    # we must clear the screen and then re-display the bar list to show the changes on the list
     screen.fill(BLACK)
     for i in range(len(bar_list)):
         __create_bar(screen, bar_list[i], i, bar_color[i])
 
 
 
-#
-# quit the visualizer and go back to menu screen
-#
+
 def quit() -> None:
+    """
+    quit the visualize and go back to the menu screen
+    """
     global _looping, _stop_sorting
     _looping = False
     _stop_sorting = True
@@ -222,20 +257,29 @@ def quit() -> None:
 
 
 
-#
-# display instruction text when the sorting process already begins
-#
+
 def __show_running_instruction(screen) -> None:
+    """
+    display the instruction text when the sorting process has already begun
+    Args:
+        screen ([type]): the screen
+    """
     if not _stop_sorting and _looping:
         display_text(screen, 'ECS: Exit visualizer', 30, 10)
         display_text(screen, 'C: Stop sorting', 30, 30)
 
 
 
-#
-# create the a bar with specific characteristics
-#
+
 def __create_bar(screen, value, index, color) -> None:
+    """
+    create a bar with a specific characteristics
+    Args:
+        screen ([type]): the screen to put the bar on
+        value ([type]): the value of the bar (which is also used to determine the bar's height)
+        index ([type]): the bar's index
+        color ([type]): the color of the bar
+    """
     pos_x = index * BAR_WIDTH + BAR_WIDTH
     pos_y = SCREEN_H + SHIFT_DOWN
     height = value
@@ -247,10 +291,11 @@ def __create_bar(screen, value, index, color) -> None:
 
 
 
-#
-# handle keyboard and mouse input after the sorting begins
-#
+
 def __input_handling() -> None:
+    """
+    handle the keyboard and mouse input after the sorting has already begun
+    """
     global _stop_sorting, _is_sorted
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -265,11 +310,16 @@ def __input_handling() -> None:
 
 
 
-#
-# update the screen display
-# including update the bar list display, the text display, and handle input
-#
+
 def __update_display(screen, bar_list, bar_color) -> None:
+    """
+    update the screen display (including the bar list display, the text display, 
+    and also handle the input)
+    Args:
+        screen ([type]): the screen
+        bar_list ([type]): the list of bars
+        bar_color ([type]): the color of the bars
+    """
     if _looping:
         show_bars(screen, bar_list, bar_color)
         __show_running_instruction(screen)

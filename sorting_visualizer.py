@@ -1,10 +1,9 @@
 import pygame
 from random import randint
 from visualizer import Visualizer
-from pygame.constants import K_1, K_2, K_3, K_4, K_5
+from pygame.constants import K_1, K_2, K_3, K_4, K_5, K_6
 from pygame.font import SysFont
 from os import getcwd
-
 
 
 BAR_WIDTH = 2
@@ -13,7 +12,7 @@ SCREEN_BORDER = 10
 SCREEN_W = BAR_WIDTH * NUM_OF_BARS
 SCREEN_H = NUM_OF_BARS
 SHIFT_DOWN = 150
-NUM_OG_ALGOS = 5
+NUM_OG_ALGOS = 6
 
 WHITE = (200, 200, 200)
 BLACK = (0, 0, 0)
@@ -87,7 +86,7 @@ class SortingVisualizer(Visualizer):
                 elif event.key == pygame.K_RETURN and not _is_sorted:
                     self.__start()
                 else:
-                    switch = {K_1: 1, K_2: 2, K_3: 3, K_4: 4, K_5: 5}
+                    switch = {K_1: 1, K_2: 2, K_3: 3, K_4: 4, K_5: 5, K_6: 6}
                     self.__choose_algo(switch.get(event.key, -1))
 
 
@@ -108,8 +107,8 @@ class SortingVisualizer(Visualizer):
                      "to choose algorithm", self.pos_x2, 10)
 
         # create the algorithm names for the user to choose
-        self._algo_names = ["1. Merge Sort", "2. Quick Sort", "3. Insertion Sort",
-                           "4. Selection Sort", "5. Bubble Sort"]
+        self._algo_names = ["1. Merge Sort", "2. Quick Sort", "3. Heap Sort",
+                            "4. Insertion Sort", "5. Selection Sort", "6. Bubble Sort"]
         for i in range(NUM_OG_ALGOS):
             self.pos_y.append(y)
             display_text(self._screen, self._algo_names[i], 
@@ -166,10 +165,12 @@ class SortingVisualizer(Visualizer):
             2: lambda screen, bar_list, bar_color: 
                 quick_sort(screen, bar_list, bar_color),
             3: lambda screen, bar_list, bar_color: 
-                insertion_sort(screen, bar_list, bar_color),
+                heap_sort(screen, bar_list, bar_color),
             4: lambda screen, bar_list, bar_color: 
-                selection_sort(screen, bar_list, bar_color),
+                insertion_sort(screen, bar_list, bar_color),
             5: lambda screen, bar_list, bar_color: 
+                selection_sort(screen, bar_list, bar_color),
+            6: lambda screen, bar_list, bar_color: 
                 bubble_sort(screen, bar_list, bar_color)
         }
         # use the algorithm corresponding to the number chosen
@@ -222,9 +223,7 @@ def swap_bars(arr, idx1, idx2) -> None:
         idx1 ([type]): the index of the 1st bar
         idx2 ([type]): the index of the 2nd bar
     """
-    temp = arr[idx1]
-    arr[idx1] = arr[idx2]
-    arr[idx2] = temp
+    arr[idx1], arr[idx2] = arr[idx2], arr[idx1]
 
 
 
@@ -314,7 +313,7 @@ def __input_handling() -> None:
 def __update_display(screen, bar_list, bar_color) -> None:
     """
     update the screen display (including the bar list display, the text display, 
-    and also handle the input)
+    and also handle the user's input)
     Args:
         screen ([type]): the screen
         bar_list ([type]): the list of bars
@@ -522,6 +521,58 @@ def __quick_sort(screen, arr, bar_color, begin, end) -> None:
         # do the same process to the left partition and right partition
         __quick_sort(screen, arr, bar_color, pivot_index + 1, end)
         __quick_sort(screen, arr, bar_color, begin, pivot_index - 1)
+        
+        
+        
+        
+############################# HEAP SORT ############################
+
+def heap_sort(screen, arr, bar_color):
+    
+    def heapify(size: int, idx: int):
+        """
+        An inner helper function to perform max heapify process
+        Args:
+            arr (list): the array
+            size (int): the size limit
+            idx (int):  current index
+        """
+        if _stop_sorting:
+            return
+        
+        max_idx = idx               # set the max index to be the current index
+        lidx = idx * 2 + 1          # the left child's index
+        ridx = idx * 2 + 2          # the right child's index
+        
+        # find the biggest element among the root and 2 children
+        if lidx < size and arr[lidx] > arr[max_idx]:
+            max_idx = lidx
+        if ridx < size and arr[ridx] > arr[max_idx]:
+            max_idx = ridx
+            
+        # if the max index has been changed
+        if max_idx != idx:
+            # swap the elements at current index and max index
+            swap_bars(arr, idx, max_idx)
+            
+            # update the display
+            bar_color[idx] = GREEN
+            bar_color[max_idx] = RED
+            __update_display(screen, arr, bar_color)
+            pygame.time.delay(1)
+            bar_color[idx] = WHITE
+            bar_color[max_idx] = WHITE
+            
+            # continue heapifying the affected subtree
+            heapify(size, max_idx)
+            
+            
+    for i in range(len(arr) // 2 - 1, -1, -1):
+        heapify(len(arr), i)
+        
+    for i in range(len(arr) - 1, -1, -1):
+        swap_bars(arr, 0, i)        # move the root to the end of the array
+        heapify(i, 0)               # max heapify the reduced heap
 
 
 

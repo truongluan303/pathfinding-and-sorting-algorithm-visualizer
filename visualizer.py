@@ -1,5 +1,4 @@
 import pygame
-import pygame_gui
 from os import path
 
 
@@ -27,9 +26,6 @@ class Visualizer:
             if path.exists(icon_path):
                 icon = pygame.image.load(icon_path)
                 pygame.display.set_icon(icon)
-                
-        # initialize the pygame_gui manager
-        self._pygame_gui_manager = pygame_gui.UIManager((width, height))
         
 
     def draw(self):

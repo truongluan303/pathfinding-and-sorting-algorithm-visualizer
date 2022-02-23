@@ -2,7 +2,6 @@ import pygame
 import random
 import sys
 from os import getcwd
-from sorting_visualizer import RED
 from visualizer import Visualizer
 from pygame.constants import K_1, K_2, K_3, K_4
 from data_structures import Queue, Stack, PriorityQueue

@@ -4,7 +4,7 @@ A Visualizer for:
   - Pathfinding algorithms including A*, Dijkstra, Breadth First Search, and Depth First Search
   - Sorting algorithms including selection sort, bubble sort, insertion sort, merge sort, and quick sort
 
-#### For the pathfinding visualizer, the program uses Manhattan distance. Therefore, there won't be diagonal path.
+##### For the pathfinding visualizer, the program uses Manhattan distance. Therefore, there won't be any diagonal path.
 
 ## Demo for Pathfinding Visualizer:
 
@@ -20,4 +20,12 @@ A Visualizer for:
 
 ## Dev Setup
 
-Check out [setup doc](./docs/setup.md) for instructions on setting up development environment!
+Try running `bin/setup` to automatically set up your virtual environment. If you are on a Unix/Linux system, permit the script before running with `chmod u+x bin/setup`.
+
+If the script fails, please check out the [setup doc](./docs/setup.md) for instructions on setting up the development environment!
+
+
+## Running The Program
+
+Once you are done with dev setup. Enter the virtual environment with `source .venv/bin/activate` if you are on a Mac/Unix/Linux system, or with `.\venv\Scripts\activate` if you are on a Windows system.
+Then simply run `python driver.py` to start the program.

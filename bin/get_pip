@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #
 ##### AUTHOR OF THIS SCRIPT: PYPA group at https://github.com/pypa/get-pip
-
 # Hi There!
 #
 # You may be wondering what this giant blob of binary data here is, you might
@@ -21,7 +20,6 @@
 #
 # If you're wondering how this is created, it is generated using
 # `scripts/generate.py` in https://github.com/pypa/get-pip.
-
 import sys
 
 this_python = sys.version_info[:2]
@@ -30,7 +28,9 @@ if this_python < min_version:
     message_parts = [
         "This script does not work on Python {}.{}".format(*this_python),
         "The minimum supported Python version is {}.{}.".format(*min_version),
-        "Please use https://bootstrap.pypa.io/pip/{}.{}/get-pip.py instead.".format(*this_python),
+        "Please use https://bootstrap.pypa.io/pip/{}.{}/get-pip.py instead.".format(
+            *this_python
+        ),
     ]
     print("ERROR: " + " ".join(message_parts))
     sys.exit(1)
@@ -65,12 +65,14 @@ def determine_pip_install_arguments():
     if implicit_setuptools:
         try:
             import setuptools  # noqa
+
             implicit_setuptools = False
         except ImportError:
             pass
     if implicit_wheel:
         try:
             import wheel  # noqa
+
             implicit_wheel = False
         except ImportError:
             pass
@@ -119,6 +121,7 @@ def bootstrap(tmpdir):
     # Execute the included pip and use it to install the latest pip and
     # setuptools from PyPI
     from pip._internal.cli.main import main as pip_entry_point
+
     args = determine_pip_install_arguments()
     sys.exit(pip_entry_point(args))
 

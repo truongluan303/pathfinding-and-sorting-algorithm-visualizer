@@ -27,5 +27,4 @@ If the script fails, please check out the [setup doc](./docs/setup.md) for instr
 
 ## Running The Program
 
-Once you are done with dev setup. Enter the virtual environment with `source .venv/bin/activate` if you are on a Mac/Unix/Linux system, or with `.\venv\Scripts\activate` if you are on a Windows system.
-Then simply run `python driver.py` to start the program.
+Once you are done with dev setup, enter the virtual environment and simply run `python3 driver.py` to start the program.

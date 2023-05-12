@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Author: Hoang Truong
+
 from src.home_window import HomeWindow
 
 

@@ -4,8 +4,8 @@ from os import path
 
 import pygame
 
-from .pathfinding_visualizer import PathfindingVisualizer
-from .sorting_visualizer import SortingVisualizer
+from src.visualizers import PathfindingVisualizer
+from src.visualizers import SortingVisualizer
 
 
 BLACK = (10, 10, 10)

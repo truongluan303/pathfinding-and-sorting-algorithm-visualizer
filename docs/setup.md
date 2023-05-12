@@ -4,9 +4,9 @@ A complete guide to setup your development environment :D
 
 ---
 
-### Requirements
+### Requirement
 
-`python 3.7` or higher
+Minimum `python3.7`. `python 3.10` is recommended.
 
 Make sure you also already installed `pip` and `venv` for your Python
 
@@ -58,4 +58,4 @@ These lint tools will be run when you commit your code and you can only successf
 
 ---
 
-### You're good to run the program or to write your code now! :)
+### You're good to run the program and also write your code now! :)

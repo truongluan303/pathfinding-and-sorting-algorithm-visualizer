@@ -3,12 +3,7 @@ from os import path
 import pygame
 
 
-###############################################
-### THE PARENT CLASS FOR THE TWO VISUALIZER ###
-# ---------------------------------------------#
-
-
-class Visualizer:
+class BaseVisualizer:
     """
     A general GUI in pygame for visualizing algorithms
     """

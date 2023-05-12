@@ -10,7 +10,7 @@ from pygame.constants import K_5
 from pygame.constants import K_6
 from pygame.font import SysFont
 
-from .visualizer import Visualizer
+from src.visualizers.base_visualizer import BaseVisualizer
 
 
 BAR_WIDTH = 2
@@ -33,11 +33,11 @@ _is_sorted = False  # check if the bar list is already _is_sorted
 _stop_sorting = False  # check whether to stop the sorting process without quitting
 
 
-#############################################################################
-######################### SORTING VISUALIZER CLASS ##########################
-# create the GUI and visualize the sorting process for different algorithms #
-# ---------------------------------------------------------------------------#
-class SortingVisualizer(Visualizer):
+class SortingVisualizer(BaseVisualizer):
+    """
+    The GUI to visualize the sorting process.
+    """
+
     def __init__(self) -> None:
         icon_path = getcwd() + "/images/sort_icon.ico"
         super().__init__(
@@ -207,10 +207,6 @@ class SortingVisualizer(Visualizer):
                 pygame.display.update()
 
 
-####################  end of Sorting Visualizer Class  ####################
-###########################################################################
-
-
 def display_text(screen, string, pos_x, pos_y, color=GREEN) -> None:
     """
     display the text on the screen
@@ -329,9 +325,6 @@ def __update_display(screen, bar_list, bar_color) -> None:
 #######################################################################################
 
 
-######################### SELECTION SORT #########################
-
-
 def selection_sort(screen, array, bar_color) -> None:
     for i in range(0, len(array)):
         min = array[i]
@@ -350,9 +343,6 @@ def selection_sort(screen, array, bar_color) -> None:
             bar_color[i] = WHITE
 
 
-######################### BUBBLE SORT #############################
-
-
 def bubble_sort(screen, array, bar_color) -> None:
     for i in range(0, len(array)):
         for j in range(0, len(array) - i - 1):
@@ -367,9 +357,6 @@ def bubble_sort(screen, array, bar_color) -> None:
                     __update_display(screen, array, bar_color)
                 bar_color[len(array) - i - 1] = WHITE
                 bar_color[j] = WHITE
-
-
-########################## INSERTION SORT ############################
 
 
 def insertion_sort(screen, arr, bar_color) -> None:
@@ -391,9 +378,6 @@ def insertion_sort(screen, arr, bar_color) -> None:
             bar_color[NUM_OF_BARS - 1] = WHITE
         arr[j + 1] = key
         bar_color[i] = WHITE
-
-
-############################# MERGE SORT ##########################
 
 
 def merge_sort(screen, arr, bar_color) -> None:
@@ -475,9 +459,6 @@ def __merge_sort(screen, arr, bar_color, begin, end):
                 j += 1
 
 
-############################# QUICK SORT ############################
-
-# helper function
 def quick_sort(screen, arr, bar_color) -> None:
     __quick_sort(screen, arr, bar_color, 0, len(arr) - 1)
 
@@ -514,9 +495,6 @@ def __quick_sort(screen, arr, bar_color, begin, end) -> None:
         # do the same process to the left partition and right partition
         __quick_sort(screen, arr, bar_color, pivot_index + 1, end)
         __quick_sort(screen, arr, bar_color, begin, pivot_index - 1)
-
-
-############################# HEAP SORT ############################
 
 
 def heap_sort(screen, arr, bar_color):
